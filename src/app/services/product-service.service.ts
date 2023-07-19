@@ -1,32 +1,34 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Products } from '../interfaces/products';
 import { FileHandle } from '../interfaces/File-handle.model'
 import { DomSanitizer } from '@angular/platform-browser';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductServiceService implements OnInit {
+export class ProductServiceService {
   watches: Products[] = [];
-
+  urlGetProduct : string = environment.getProducts;
+  urlAddProduct : string = environment.addProduct;
+  urlRemoveProduct : string = environment.removeProduct;
+  
   constructor(private httpClient: HttpClient, private sanitizer: DomSanitizer) {
     this.getProducts();
   }
-  ngOnInit(): void {
+
+  addProduct(product: FormData) : Observable<Products>{
+    return this.httpClient.post<Products>(this.urlAddProduct, product);
   }
 
-  addProduct(product: FormData) {
-    return this.httpClient.post<Products>("http://localhost:8080/addNewProduct", product);
+  removeProduct(id: any) : Observable<Products>{
+    return this.httpClient.delete<Products>(this.urlRemoveProduct + id)
   }
 
-  removeProduct(id: any) {
-    return this.httpClient.delete<Products>("http://localhost:8080/deleteProduct/" + id)
-  }
-
-  getProducts() {
-    this.httpClient.get<Products[]>("http://localhost:8080/getAllProducts").pipe(
+  getProducts(): void {
+    this.httpClient.get<Products[]>(this.urlGetProduct).pipe(
       map((x: Products[], i) => x.map((product: Products) => this.createImages(product)))
     )
       .subscribe((response: Products[]) => {
@@ -36,7 +38,7 @@ export class ProductServiceService implements OnInit {
         (error: HttpErrorResponse) => console.log(error));;
   }
 
-  createImages(product: Products): any {
+  createImages(product: Products): Products {
     const productImages: any = product.productImages;
     if (!productImages || !productImages.picByte || !productImages.type || !productImages.name) {
            throw new Error('Invalid image data');
@@ -56,7 +58,7 @@ export class ProductServiceService implements OnInit {
   
 
 
-  dataURItoBlob(picBytes: string, imageType: string) {
+  dataURItoBlob(picBytes: string, imageType: string): Blob {
     const byteString = window.atob(picBytes);
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const int8Array = new Uint8Array(arrayBuffer);
@@ -67,12 +69,9 @@ export class ProductServiceService implements OnInit {
     return blob;
   }
   
-  findByModel(property: string) {
+  findByModel(property: string): Products {
     const lowerCaseProperty = property.toLowerCase();
     let foundWatch = this.watches.filter(watch => watch.model.toLowerCase() === lowerCaseProperty);
-    if (foundWatch.length > 0)
-      return foundWatch[0];
-    else
-      return {};
+     return foundWatch[0];
   }
 }

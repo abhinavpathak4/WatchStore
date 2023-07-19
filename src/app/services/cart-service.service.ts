@@ -13,7 +13,7 @@ export class CartServiceService {
 
 
 
-  addToCartList(item: Products) {
+  addToCartList(item: Products): void {
     item.cartAdded = !item.cartAdded;
     if (!this.cartList.includes(item))
       if (item.cartAdded) this.cartList.push(item);

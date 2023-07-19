@@ -15,32 +15,32 @@ export class HomeComponent implements OnInit {
   notFound: boolean = false;
   visibility: boolean = false;
 
-  constructor(private productService: ProductServiceService,private cartService: CartServiceService, private router: Router) { }
+  constructor(private productService: ProductServiceService,
+    private cartService: CartServiceService, 
+    private router: Router) { }
 
   ngOnInit() {
     this.watches = this.productService.watches;
   }
 
-  detailsPage(brand: string) {
+  detailsPage(brand: string): void {
     this.router.navigate(['details', brand])
   }
 
-  addToCartList(item: Products) {
+  addToCartList(item: Products): void {
     this.cartService.addToCartList(item);
   }
   
-  filterWatches(searchQuery: string) {
+  filterWatches(searchQuery: string): void {
     const lowerCaseQuery = searchQuery.toLowerCase();
     this.watches = this.productService.watches.filter(watch =>
-      watch.model.toLowerCase().includes(lowerCaseQuery)
-    );
-
+      watch.model.toLowerCase().includes(lowerCaseQuery));
     if (this.watches.length === 0) this.notFound = true;
     else this.notFound = false;
     this.visibility = true;
   }
 
-  home() {
+  home(): void {
     this.watches = this.productService.watches;
     this.notFound = false;
     this.visibility = false;

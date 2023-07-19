@@ -10,7 +10,7 @@ import { ProductServiceService } from '../services/product-service.service';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
-  watch:any;
+  watch! :Products ;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,12 +19,16 @@ export class DetailsComponent {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.watch = this.productService.findByModel(params['model']);
-    });
+    this.getParams();
   }
 
-  addToCartList(item: Products) {
+  getParams(): void{
+    this.route.params.subscribe(params => {
+      this.watch = this.productService.findByModel(params['model']);
+    })
+  }
+
+  addToCartList(item: Products): void {
     this.cartService.addToCartList(item);
   }
 }

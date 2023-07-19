@@ -10,11 +10,11 @@ import { UserServiceService } from '../services/user-service.service';
 export class NavbarComponent {
   constructor(public userService : UserServiceService, private router : Router){}
 
-  logout(){
+  logout(): void{
     this.userService.isLoggedIn = false;
   }
 
-  detailsPage(brand : string){
+  detailsPage(brand : string): void{
       this.router.navigate(['details',brand])
     }
 }

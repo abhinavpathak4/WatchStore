@@ -23,9 +23,7 @@ export class CartComponent implements OnInit {
 
   deleteFromCart(item: Products): void {
     const index = this.cartWatches.indexOf(item);
-    if (index !== -1) {
-      this.cartWatches.splice(index, 1);
-    }
+    if (index !== -1) this.cartWatches.splice(index, 1);
   }
 
   sortOptions(selectedValue: string): void {
