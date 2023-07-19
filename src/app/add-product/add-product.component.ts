@@ -25,7 +25,7 @@ export class AddProductComponent implements OnInit {
 
   /** Array to store existing products (watches). */
   watches: Products[] = [];
-  
+  product! : Products;
   constructor(private sanitizer: DomSanitizer, private productService: ProductServiceService) { }
 
   
@@ -34,15 +34,7 @@ export class AddProductComponent implements OnInit {
     this.watches = this.productService.watches;
   }
 
-  /** Object to hold the details of the product to be added. */
-  product: Products = {
-    price: 0,
-    cartAdded: false,
-    model: '',
-    info: '',
-    smallInfo: '',
-    productImages: {},
-  }
+  
 
   /**
    * @method addProduct
