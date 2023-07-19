@@ -13,8 +13,13 @@ import { ProductServiceService } from '../services/product-service.service';
 })
 export class LoginComponent {
  
+  // Array to store the list of users
   private users: UserRegister[] = [];
+
+  // Flag to indicate whether login credentials are valid
   isValid: boolean = true;
+
+  // Form group for the login form
   loginForm: FormGroup = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
@@ -26,16 +31,21 @@ export class LoginComponent {
     private productService: ProductServiceService
   ) {}
 
+  
   ngOnInit() {
+    // Fetch the list of users when the component is initialized
     this.getUserList();
   }
 
-
-  getUserList(): void{
+  /**
+   * @method getUserList
+   * Fetches the list of users from the userService.
+   * @memberof LoginComponent
+   */
+  getUserList(): void {
     this.userService.getUsers().subscribe(
       (response: UserRegister[]) => {
         this.users = response;
-        console.log(this.users);
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
@@ -43,8 +53,12 @@ export class LoginComponent {
     );
   }
 
-  
-
+  /**
+   * @method authenticate
+   * Authenticates the user based on the provided login credentials.
+   * and check whether the credentials are of admin or not
+   * @memberof LoginComponent
+   */
   authenticate(): void {
     const user = this.users.find(
       (u) =>

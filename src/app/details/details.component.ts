@@ -10,24 +10,39 @@ import { ProductServiceService } from '../services/product-service.service';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
-  watch! :Products ;
+  // Variable to hold the details of the selected watch
+  watch!: Products;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductServiceService,
-    private cartService : CartServiceService
+    private cartService: CartServiceService
   ) {}
 
+  
   ngOnInit() {
+    // Retrieve the URL parameters and fetch the watch details
     this.getParams();
   }
 
-  getParams(): void{
+  /**
+   * @method getParams
+   * Retrieves the URL parameters to fetch the details of the selected watch.
+   * @memberof DetailsComponent
+   */
+  getParams(): void {
     this.route.params.subscribe(params => {
+      // Find the watch details by its model from the productService
       this.watch = this.productService.findByModel(params['model']);
-    })
+    });
   }
 
+  /**
+   * @method addToCartList
+   * Adds the selected watch to the cart list.
+   * @param item The watch to be added to the cart.
+   * @methodof DetailsComponent
+   */
   addToCartList(item: Products): void {
     this.cartService.addToCartList(item);
   }
